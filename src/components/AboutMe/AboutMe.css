@@ -1,0 +1,89 @@
+.aboutMe {
+  width: 100%;
+  min-height: 654px;
+}
+
+.aboutMe__container {
+  width: 85%;
+  max-width: 1280px;
+  height: 100%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.aboutMe__title {
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 27px;
+  margin: 110px 0 0;
+  padding-bottom: 23px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #000;
+  align-self: stretch;
+  letter-spacing: -0.04em;
+}
+
+.aboutMe__myCard {
+  margin: 66px 0 0;
+  position: relative;
+  height: 327px;
+}
+
+.aboutMe__myName {
+  width: 600px;
+  font-weight: 400;
+  font-size: 50px;
+  line-height: 58px;
+  letter-spacing: -0.04em;
+  color: #000000;
+  margin: 0;
+}
+
+.aboutMe__myInfo {
+  width: 600px;
+  margin: 18px 0 0;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 20px;
+  color: #000000;
+  mix-blend-mode: normal;
+}
+
+.aboutMe__myComment {
+  width: 600px;
+  margin: 26px 0 0;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 22px;
+  color: #000000;
+  mix-blend-mode: normal;
+}
+
+.aboutMe__myLinks {
+  position: absolute;
+  bottom: 0;
+}
+
+.aboutMe__myLink {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+  color: #000000;
+  margin-left: 20px;
+  text-decoration: none;
+}
+
+.aboutMe__myLink:first-of-type {
+  margin-left: 0;
+}
+
+.aboutMe__myPhoto {
+  width: 270px;
+  height: 327px;
+  border-radius: 10px;
+  background-size: cover;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
