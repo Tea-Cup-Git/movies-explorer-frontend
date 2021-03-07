@@ -1,37 +1,18 @@
 .aboutMe {
   width: 100%;
-  min-height: 654px;
-}
-
-.aboutMe__container {
-  width: 85%;
-  max-width: 1280px;
-  height: 100%;
-  margin: auto;
-  display: flex;
-  flex-direction: column;
 }
 
 .aboutMe__title {
-  font-weight: 400;
-  font-size: 22px;
-  line-height: 27px;
   margin: 110px 0 0;
-  padding-bottom: 23px;
-  box-sizing: border-box;
-  border-bottom: 1px solid #000;
-  align-self: stretch;
-  letter-spacing: -0.04em;
 }
 
 .aboutMe__myCard {
   margin: 66px 0 0;
   position: relative;
-  height: 327px;
+  min-height: 327px;
 }
 
 .aboutMe__myName {
-  width: 600px;
   font-weight: 400;
   font-size: 50px;
   line-height: 58px;
@@ -41,7 +22,6 @@
 }
 
 .aboutMe__myInfo {
-  width: 600px;
   margin: 18px 0 0;
   font-weight: 500;
   font-size: 18px;
@@ -51,7 +31,7 @@
 }
 
 .aboutMe__myComment {
-  width: 600px;
+  max-width: 600px;
   margin: 26px 0 0;
   font-weight: 400;
   font-size: 14px;
@@ -72,6 +52,12 @@
   color: #000000;
   margin-left: 20px;
   text-decoration: none;
+  transition: .3s ease;
+}
+
+.aboutMe__myLink:hover {
+  opacity: 0.6;
+  transition: opacity .3s ease;
 }
 
 .aboutMe__myLink:first-of-type {
@@ -86,4 +72,72 @@
   position: absolute;
   top: 0;
   right: 0;
+}
+
+@media screen and (max-width: 1080px) {
+  .aboutMe__title {
+    margin: 90px 0 0;
+  }
+
+  .aboutMe__myName {
+    font-size: 40px;
+    line-height: 40px;
+  }
+
+  .aboutMe__myInfo {
+    margin: 16px 0 0;
+    font-size: 12px;
+    line-height: 18px;
+  }
+  
+  .aboutMe__myComment {
+    max-width: 364px;
+    margin: 20px 0 0;
+    font-size: 12px;
+    line-height: 18px;
+  }
+}
+
+@media screen and (max-width: 720px) {
+  .aboutMe__title {
+    margin: 70px 0 0;
+  }
+
+  .aboutMe__myCard {
+    margin: 60px 0 0;
+  }
+
+  .aboutMe__myName {
+    margin: 40px 0 0;
+    font-size: 30px;
+    line-height: 36px;
+  }
+
+  .aboutMe__myInfo {
+    margin: 20px 0 0;
+    font-size: 11px;
+    line-height: 16px;
+  }
+  
+  .aboutMe__myComment {
+    max-width: 364px;
+    margin: 20px 0 0;
+    font-size: 11px;
+    line-height: 16px;
+  }
+
+  .aboutMe__myPhoto {
+    width: 292px;
+    height: 352px;
+    position: relative;
+  }
+
+  .aboutMe__myLinks {
+    position: relative;
+    margin: 40px 0 0;
+  }
+
+  .aboutMe__myLink {
+    margin-left: 26px;
+  }
 }
