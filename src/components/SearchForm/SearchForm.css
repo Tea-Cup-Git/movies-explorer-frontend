@@ -1,0 +1,112 @@
+.searchForm {
+  width: 90%;
+  max-width: 1280px;
+  margin: 80px auto 94px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.searchForm__container {
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+  flex-grow: 1;
+  padding: 0;
+  margin: 0;
+  border: none;
+  position: relative;
+}
+
+.searchForm__input {
+  width: 100%;
+  height: 48px;
+  margin: 0;
+  padding: 0 73px 0 22px;
+  border: 1.5px solid rgba(170, 170, 170, 0.2);
+  box-sizing: border-box;
+  border-radius: 50px;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 18px;
+  color: #000;
+  outline: none;
+  transition: 0.3s ease-out;
+}
+
+.searchForm__input::placeholder {
+  color: #A0A0A0;
+}
+
+.searchForm__input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  width: 8px;
+  height: 8px;
+  margin-top: 2px;
+  background: url(../../images/clear.svg);
+  background-size: contain;
+}
+
+.searchForm__input:focus {
+  border: 1.5px solid rgb(170, 170, 170);
+  transition: 0.3s ease;
+}
+
+.searchForm__input:hover {
+  box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.05);
+  transition: 0.3s ease;
+}
+
+.searchForm__button {
+  position: absolute;
+  width: 58.65px;
+  height: 34px;
+  right: 7px;
+  background: #2BE080;
+  border: 1px solid #2BE080;
+  border-radius: 48px;
+  font-weight: 500;
+  font-size: 11px;
+  line-height: 18px;
+  text-align: center;
+  color: #FFFFFF;
+  outline: none;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.searchForm__button:hover {
+  border-color: #27ce75;
+  box-shadow: 0 0 5px 4px rgba(0, 0, 0, 0.05);
+  transition: 0.3s ease;
+}
+
+.searchForm__button:focus {
+  border-color: #27ce75;
+  box-shadow: 0 0 5px 4px rgba(0, 0, 0, 0.05);
+  transition: 0.3s ease;
+}
+
+.searchForm__button:active {
+  background-color: #27ce75;
+  transition: 0.3s ease;
+}
+
+@media screen and (max-width: 1080px) {
+  .searchForm {
+    margin: 60px auto 68px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+  }
+}
+
+@media screen and (max-width: 720px) {
+  .searchForm {
+    margin: 60px auto 44px;
+  }
+}
