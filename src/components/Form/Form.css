@@ -151,12 +151,19 @@
   color: #A0A0A0;
 }
 
-.form__error {
+.form__message {
   font-weight: 400;
   font-size: 14px;
   line-height: 17px;
   text-align: center;
+}
+
+.form__message_error {
   color: #EE3465;
+}
+
+.form__message_success {
+  color: #27cf75;
 }
 
 .form__link {

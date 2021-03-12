@@ -6,7 +6,7 @@ import * as yup from 'yup';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import './Profile.css';
 
-function Profile({ handleEditProfile, editError, onExit, loggedIn, location }) {
+function Profile({ handleEditProfile, editError, editSuccess, onExit, loggedIn, location }) {
 
   const currentUser = React.useContext(CurrentUserContext);
   
@@ -50,7 +50,8 @@ function Profile({ handleEditProfile, editError, onExit, loggedIn, location }) {
             buttonTitle={'Редактировать'}
             text=''
             linkTitle='Выйти из аккаунта'
-            formError={editError ? 'Что-то пошло не так.. Возможно пользователь с такой почтой уже существует' : ''}
+            onError={editError ? 'Что-то пошло не так.. Возможно пользователь с такой почтой уже существует' : ''}
+            onSuccess={editSuccess ? 'Данные изменены' : ''}
             isValid={isValid}
             onSubmit={handleSubmit}
             dirty={dirty}

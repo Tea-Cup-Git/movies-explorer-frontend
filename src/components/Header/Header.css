@@ -189,6 +189,10 @@
   transition: visibility 0.2s ease, opacity 0.2s ease-out;
 }
 
+.header__popup__container {
+  display: flex;
+}
+
 .header__popup__navBar {
   width: 520px;
   display: flex;

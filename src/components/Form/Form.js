@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import './Form.css';
 import headerLogo from '../../images/logo.svg'
 
-function Form({ formName, formTitle, buttonTitle, text, linkTitle, formError, isValid, onSubmit, dirty, onExit, ...props }) {
+function Form({ formName, formTitle, buttonTitle, text, linkTitle, onError, onSuccess, isValid, onSubmit, dirty, onExit, ...props }) {
   
   let linkPath;
   if (linkTitle === 'Войти') {
@@ -24,7 +24,8 @@ function Form({ formName, formTitle, buttonTitle, text, linkTitle, formError, is
         <h1 className='form__title'>{formTitle}</h1>
         {props.children}
         <div className='form__footer'>
-          <p className='form__error'>{formError}</p>
+          <p className='form__message form__message_error'>{onError}</p>
+          <p className='form__message form__message_success'>{onSuccess}</p>
           <button 
             id='submitButton'
             className={`form__button form__button_${formName}`}

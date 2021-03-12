@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import EscapeOutside from "react-escape-outside";
 import './Header.css';
 import headerLogo from '../../images/logo.svg';
 
@@ -42,8 +43,9 @@ function Header({ loggedIn, location }) {
             <button className='header__button header__button_dark'>Войти</button>
           </Link>
         </nav>
-
+        
         <div className='header__popup'>
+        <EscapeOutside className='header__popup__container' onEscapeOutside={closePopup}>
           <nav className='header__popup__navBar'>
             <Link 
               to={'/'}
@@ -68,6 +70,7 @@ function Header({ loggedIn, location }) {
             </Link>
             <button className='header__popup__closeButton' onClick={closePopup} />
           </nav>
+          </EscapeOutside>
         </div>
         
       </div>

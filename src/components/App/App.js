@@ -26,6 +26,7 @@ function App() {
   const [authError, setAuthError] = React.useState(false);
   const [regError, setRegError] = React.useState(false);
   const [editError, setEditError] = React.useState(false);
+  const [editSuccess, setEditSuccess] = React.useState(false);
 
   // Проверка токена
   React.useEffect(() => {
@@ -84,10 +85,14 @@ function App() {
       });
   };
 
+  // Редактировать профиль
   function handleEditProfile(name, email) {
     const token = getToken();
     mainApi.setUser( name, email, token )
-    .then(() => document.getElementById('submitButton').disabled = true)
+    .then(() => {
+      document.getElementById('submitButton').disabled = true;
+      setEditSuccess(true);
+    })
     .catch((err) => {
       console.error(err);
       setEditError(true);
@@ -136,6 +141,7 @@ function App() {
             loggedIn={loggedIn}
             handleEditProfile={handleEditProfile}
             editError={editError}
+            editSuccess={editSuccess}
             onExit={handleSignOut}
           />
           <Route exact path='/signup'>
