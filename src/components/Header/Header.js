@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Header.css';
-import headerLogo from '../../images/logo.svg'
+import headerLogo from '../../images/logo.svg';
 
-function Header({ location }) {
+function Header({ loggedIn, location }) {
   function closePopup() {
     document.querySelector('.header__popup').classList.remove('header__popup_visible');
   };
@@ -13,14 +13,14 @@ function Header({ location }) {
   };
 
   return (
-    <header className={`header ${location.pathname === '/' ? 'header_dark' : ''}`}>
+    <header className={`header ${loggedIn ? '' : 'header_dark'}`}>
       <div className='header__container'>
         <Link to={'/'}>
           <img className='header__logo' src={headerLogo} alt='Movies-Explorer' />
         </Link>
-        <button className={location.pathname === '/' ? 'header__navButton_hidden' : 'header__navButton'} onClick={openPopup} />
+        <button className={loggedIn ? 'header__navButton' : 'header__navButton_hidden'} onClick={openPopup} />
 
-        <nav className={`header__navBar ${location.pathname === '/' ? 'header__navBar_hidden' : 'header__navBar_light'}`}>
+        <nav className={`header__navBar ${loggedIn ? 'header__navBar_light' : 'header__navBar_hidden'}`}>
           <Link 
             to={'/movies'}
             className={`header__link header__link_light ${location.pathname === '/movies' ? 'header__link_accented' : ''}`}
@@ -36,7 +36,7 @@ function Header({ location }) {
           </Link>
         </nav>
 
-        <nav className={`header__navBar ${location.pathname === '/' ? 'header__navBar_dark' : 'header__navBar_hidden'}`}>
+        <nav className={`header__navBar ${loggedIn ? 'header__navBar_hidden' : 'header__navBar_dark'}`}>
           <Link to={'/signup'} className='header__link header__link_dark'>Регистрация</Link>
           <Link to={'/signin'}>
             <button className='header__button header__button_dark'>Войти</button>

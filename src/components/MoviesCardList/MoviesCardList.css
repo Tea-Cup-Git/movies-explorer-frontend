@@ -7,6 +7,15 @@
   flex-direction: column;
 }
 
+.moviesCardList__container {
+  width: 100%;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 300px);
+  justify-content: center;
+  grid-gap: 20px;
+}
+
 .moviesCardList__button {
   margin: 50px auto 0;
   width: 320px;
@@ -42,6 +51,12 @@
 
 @media screen and (max-width: 720px) {
   .moviesCardList {
+    width: 94%;
     padding: 50px 0 80px;
+  }
+
+  .moviesCardList__button {
+    width: 240px;
+    height: 36px;
   }
 }
