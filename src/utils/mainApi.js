@@ -1,5 +1,8 @@
 import { setToken } from './token';
-const BASE_URL = 'http://localhost:3000';
+
+const BASE_URL = 'https://api.lebedevadiploma.students.nomoredomains.work';
+
+// const BASE_URL = 'http://localhost:3000';
 
 const handleResponse = (res) => (res.ok) ? res.json() : Promise.reject(`Ошибка: ${res.status}`);
 
