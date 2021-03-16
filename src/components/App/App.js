@@ -11,10 +11,12 @@ import Profile from '../Profile/Profile';
 import Register from '../Register/Register';
 import Login from '../Login/Login';
 import NotFound from '../NotFound/NotFound';
-import Preloader from '../Preloader/Preloader';
 import './App.css';
+
 import * as mainApi from '../../utils/mainApi';
-import { getToken, removeToken, setToken } from '../../utils/token';
+import * as moviesApi from '../../utils/moviesApi';
+import { getToken, setToken } from '../../utils/token';
+import { searchByKeyword, moviesConversion } from '../../utils/helpers';
 
 function App() {
 
@@ -27,22 +29,112 @@ function App() {
   const [regError, setRegError] = React.useState(false);
   const [editError, setEditError] = React.useState(false);
   const [editSuccess, setEditSuccess] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [foundMovies, setFoundMovies] = React.useState([]);
+  const [savedMovies, setSavedMovies] = React.useState([]);
+  const [savedMoviesIds, setSavedMoviesIds] = React.useState([]);
+  const [foundSavedMovies, setFoundSavedMovies] = React.useState([]);
+  const [isFetched, setIsFetched] = React.useState(false);
 
-  // Проверка токена
+  function fetchMovies() {
+    setIsLoading(true);
+    moviesApi.getMovies()
+      .then((movies) => {
+        const conversedMovies = moviesConversion(movies, 'https://api.nomoreparties.co');
+        localStorage.setItem('movies', JSON.stringify(conversedMovies));
+      })
+      .catch((err) => {
+        console.error(err);
+      })
+      .then(() => {
+        setIsLoading(false);
+        setIsFetched(true)
+      })
+  }
+
+  function handleSearch(keyword, isIncludesShort) {
+    let movies = localStorage.getItem('movies');
+    if (!isFetched) {
+      fetchMovies();
+    } else {
+      movies = JSON.parse(movies);
+      const filteredMovies = searchByKeyword(movies, keyword, isIncludesShort);
+      setFoundMovies(filteredMovies);
+      localStorage.setItem('searchedMovies', JSON.stringify(filteredMovies));
+    }
+  }
+
+  function handleSavedMoviesSearch(keyword, isIncludesShort) {
+    const filteredSavedMovies = searchByKeyword(savedMovies, keyword, isIncludesShort);
+    setFoundSavedMovies(filteredSavedMovies);
+  }
+
+  function saveMovie(movie) {
+    const token = getToken();
+    mainApi.addMovie(token, movie)
+      .then((savedMovie) => {
+        setSavedMovies([...savedMovies, savedMovie]);
+        setSavedMoviesIds([...savedMoviesIds, (savedMovie.movieId)]);
+        setFoundSavedMovies([...savedMovies, savedMovie]);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
+
+  function removeMovie(movie) {
+    const token = getToken();
+    mainApi.deleteMovie(token, movie)
+      .then((removedMovie) => {
+        const filteredMovies = savedMovies.filter((movie) => movie.movieId !== removedMovie.movieId);
+        const filteredMoviesIds = savedMoviesIds.filter((id) => id !== removedMovie.movieId);
+        
+        setSavedMovies(filteredMovies);
+        setSavedMoviesIds(filteredMoviesIds);
+        setFoundSavedMovies(filteredMovies);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
+
+  React.useEffect(() => {
+    if (loggedIn) {
+    const token = getToken();
+    mainApi.getMovies(token)
+      .then((movie) => {
+        setSavedMovies(movie);
+        setSavedMoviesIds(movie.map((movie) => movie.movieId));
+        setFoundSavedMovies(movie);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+    }
+  }, [loggedIn])
+
+  React.useEffect(() => {
+    const localSearchedMovies = localStorage.getItem('searchedMovies');
+
+    if (loggedIn && localSearchedMovies) {
+      setFoundMovies(JSON.parse(localSearchedMovies));
+    }
+  }, [loggedIn]);
+
   React.useEffect(() => {
     const token = getToken();
     mainApi.getUser(token)
       .then((res) => {
         if (!res) return Promise.reject('Unauthorized');
-        console.log(res)
+
         setCurrentUser(res);
         setLoggedIn(true);
-        console.log(loggedIn)
         location.pathname === '/movies' && history.push('/movies');
         location.pathname === '/saved-movies' && history.push('/saved-movies');
         location.pathname === '/profile' && history.push('/profile');
       })
       .catch((err) => {
+        setLoggedIn(false);
         location.pathname === '/movies' && history.push('/');
         location.pathname === '/saved-movies' && history.push('/');
         location.pathname === '/profile' && history.push('/');
@@ -105,9 +197,9 @@ function App() {
       .then(() => {
         setLoggedIn(false);
         setCurrentUser({});
-        removeToken();
+        localStorage.clear();
+        setIsFetched(false);
         history.push('/');
-        console.log('Ну я пошел..')
       });
   };
 
@@ -128,12 +220,22 @@ function App() {
             component={Movies}
             loggedIn={loggedIn}
             location={location}
+            isLoading={isLoading}
+            handleSearch={handleSearch}
+            movies={foundMovies}
+            savedMoviesIds={savedMoviesIds}
+            onLike={saveMovie}
+            onDislike={removeMovie}
           />
           <ProtectedRoute
             path='/saved-movies'
             component={SavedMovies}
             loggedIn={loggedIn}
             location={location}
+            handleSearch={handleSavedMoviesSearch}
+            movies={foundSavedMovies}
+            savedMoviesIds={savedMoviesIds}
+            onDislike={removeMovie}
           />
           <ProtectedRoute
             path='/profile'
@@ -144,25 +246,28 @@ function App() {
             editSuccess={editSuccess}
             onExit={handleSignOut}
           />
-          <Route exact path='/signup'>
-            <Register
-              handleRegister={handleRegister}
-              regError={regError}
-            />
+          <Route path='/signup'>
+            {!loggedIn
+              ? <Register
+                  handleRegister={handleRegister}
+                  regError={regError}
+                />
+              : <Redirect to='/movies' />
+            }
           </Route>
-          <Route exact path='/signin'>
-            <Login
-              handleLogin={handleLogin}
-              authError={authError}
-            />
+          <Route path='/signin'>
+            {!loggedIn
+              ? <Login
+                  handleLogin={handleLogin}
+                  authError={authError}
+                />
+              : <Redirect to='/movies' />
+            }
           </Route>
-          <Route exact path='/404'>
+          <Route path='*'>
             <NotFound />
           </Route>
         </Switch>
-        <Route exact path='/preloader'>
-          <Preloader />
-        </Route>
       </main>
     </CurrentUserContext.Provider>
   );

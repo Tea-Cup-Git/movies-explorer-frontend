@@ -61,11 +61,38 @@ export const setUser = (name, email, token) => {
 
 export const signOut = () => {
   return fetch(`${BASE_URL}/signout`, {
-    method: 'GET',
-    headers: {
-      'Accept': 'application/json',
-      'Content-type': 'application/json'
-    }
+    method: 'GET'
   })
     .catch((err) => console.log(err));
+};
+
+export const getMovies = (token) => {
+  return fetch(`${BASE_URL}/movies`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  }).then((res) => handleResponse(res));
+};
+
+export const addMovie = (token, movie) => {
+  return fetch(`${BASE_URL}/movies`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(movie),
+  }).then((res) => handleResponse(res));
+};
+
+export const deleteMovie = (token, movie) => {
+  return fetch(`${BASE_URL}/movies/${movie.movieId}`, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(movie),
+  }).then((res) => handleResponse(res));
 };

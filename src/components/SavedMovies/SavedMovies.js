@@ -5,7 +5,7 @@ import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Footer from '../Footer/Footer';
 import './SavedMovies.css';
 
-function SavedMovies({ loggedIn, location }) {
+function SavedMovies({ loggedIn, location, handleSearch, movies, savedMoviesIds, onDislike }) {
   return (
     <>
     <Header
@@ -13,9 +13,13 @@ function SavedMovies({ loggedIn, location }) {
       location={location}
     />
     <section className="movies">
-      <SearchForm />
+      <SearchForm handleSearch={handleSearch} />
       <MoviesCardList
         location={location}
+        movies={movies}
+        handleSearch={handleSearch}
+        savedMoviesIds={savedMoviesIds}
+        onDislike={onDislike}
       />
     </section>
     <Footer />

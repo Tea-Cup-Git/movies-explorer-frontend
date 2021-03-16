@@ -94,6 +94,13 @@
   transition: 0.3s ease;
 }
 
+.searchForm__button:disabled {
+  background-color: #EBEBEB;
+  border: none;
+  box-shadow: none;
+  cursor: default;
+}
+
 @media screen and (max-width: 1080px) {
   .searchForm {
     margin: 60px auto 68px;
