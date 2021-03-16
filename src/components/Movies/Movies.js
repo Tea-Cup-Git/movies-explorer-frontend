@@ -5,7 +5,7 @@ import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Footer from '../Footer/Footer';
 import './Movies.css';
 
-function Movies({ loggedIn, location, handleSearch, movies, savedMoviesIds, onLike, onDislike }) {
+function Movies({ loggedIn, location, isLoading, handleSearch, movies, savedMoviesIds, onLike, onDislike, isFetched }) {
   return (
     <>
     <Header
@@ -14,13 +14,16 @@ function Movies({ loggedIn, location, handleSearch, movies, savedMoviesIds, onLi
     />
     <section className='movies'>
       <SearchForm handleSearch={handleSearch} />
-      <MoviesCardList
-        location={location}
-        movies={movies}
-        savedMoviesIds={savedMoviesIds}
-        onLike={onLike}
-        onDislike={onDislike}
-      />
+      {isFetched
+        &&  <MoviesCardList
+              location={location}
+              isLoading={isLoading}
+              movies={movies}
+              savedMoviesIds={savedMoviesIds}
+              onLike={onLike}
+              onDislike={onDislike}
+            />
+      }
     </section>
     <Footer />
     </>

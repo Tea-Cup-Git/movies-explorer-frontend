@@ -99,6 +99,11 @@ function App() {
   }
 
   React.useEffect(() => {
+    checkToken();
+    console.log(loggedIn)
+  }, []);
+
+  React.useEffect(() => {
     if (loggedIn) {
     const token = getToken();
     mainApi.getMovies(token)
@@ -121,33 +126,28 @@ function App() {
     }
   }, [loggedIn]);
 
-  React.useEffect(() => {
+  function checkToken() {
     const token = getToken();
     mainApi.getUser(token)
       .then((res) => {
-        if (!res) return Promise.reject('Unauthorized');
-
-        setCurrentUser(res);
-        setLoggedIn(true);
-        location.pathname === '/movies' && history.push('/movies');
-        location.pathname === '/saved-movies' && history.push('/saved-movies');
-        location.pathname === '/profile' && history.push('/profile');
+        if(res) {
+          setCurrentUser(res);
+          setLoggedIn(true);
+        } else {
+          setCurrentUser({});
+          setLoggedIn(false);
+        }
       })
       .catch((err) => {
-        setLoggedIn(false);
-        location.pathname === '/movies' && history.push('/');
-        location.pathname === '/saved-movies' && history.push('/');
-        location.pathname === '/profile' && history.push('/');
         console.error(err);
       });
-  }, []);
+  }
 
   // Регистрация
   function handleRegister(name, email, password) {
     mainApi.register(name, email, password)
       .then(() => {
         setLoggedIn(true);
-        history.push('/movies');
       })
       .catch((err) => {
         console.error(err);
@@ -169,7 +169,6 @@ function App() {
             setAuthError(true);
           });
         setLoggedIn(true);
-        history.push('/movies');
       })
       .catch((err) => {
         console.error(err);
@@ -220,6 +219,7 @@ function App() {
             component={Movies}
             loggedIn={loggedIn}
             location={location}
+            isFetched={isFetched}
             isLoading={isLoading}
             handleSearch={handleSearch}
             movies={foundMovies}
