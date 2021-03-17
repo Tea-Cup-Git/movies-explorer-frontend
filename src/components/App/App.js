@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch, useLocation, Redirect, useHistory } from 'react-router-dom';
+import { Route, Switch, useLocation, Redirect } from 'react-router-dom';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import Header from '../Header/Header';
@@ -21,8 +21,8 @@ import { searchByKeyword, moviesConversion } from '../../utils/helpers';
 function App() {
 
   const location = useLocation();
-  const history = useHistory();
 
+  const [tokenChecked, setTokenChecked] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState({});
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [authError, setAuthError] = React.useState(false);
@@ -99,11 +99,6 @@ function App() {
   }
 
   React.useEffect(() => {
-    checkToken();
-    console.log(loggedIn)
-  }, []);
-
-  React.useEffect(() => {
     if (loggedIn) {
     const token = getToken();
     mainApi.getMovies(token)
@@ -123,25 +118,25 @@ function App() {
 
     if (loggedIn && localSearchedMovies) {
       setFoundMovies(JSON.parse(localSearchedMovies));
+      setIsFetched(true);
     }
   }, [loggedIn]);
 
-  function checkToken() {
+  React.useEffect(() => {
     const token = getToken();
     mainApi.getUser(token)
       .then((res) => {
-        if(res) {
-          setCurrentUser(res);
-          setLoggedIn(true);
-        } else {
-          setCurrentUser({});
-          setLoggedIn(false);
-        }
+        if (!res) return Promise.reject('Unauthorized');
+
+        setCurrentUser(res);
+        setLoggedIn(true);
       })
       .catch((err) => {
+        setLoggedIn(false);
         console.error(err);
-      });
-  }
+      })
+      .then(() => setTokenChecked(true));
+  }, []);
 
   // Регистрация
   function handleRegister(name, email, password) {
@@ -198,76 +193,77 @@ function App() {
         setCurrentUser({});
         localStorage.clear();
         setIsFetched(false);
-        history.push('/');
       });
   };
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <main className='app'>
-        <Switch>
-          <Route exact path='/'>
-            <Header
-              loggedIn={loggedIn}
-              location={location}
-            />
-            <Main />
-            <Footer />
-          </Route>
-          <ProtectedRoute
-            path='/movies'
-            component={Movies}
-            loggedIn={loggedIn}
-            location={location}
-            isFetched={isFetched}
-            isLoading={isLoading}
-            handleSearch={handleSearch}
-            movies={foundMovies}
-            savedMoviesIds={savedMoviesIds}
-            onLike={saveMovie}
-            onDislike={removeMovie}
-          />
-          <ProtectedRoute
-            path='/saved-movies'
-            component={SavedMovies}
-            loggedIn={loggedIn}
-            location={location}
-            handleSearch={handleSavedMoviesSearch}
-            movies={foundSavedMovies}
-            savedMoviesIds={savedMoviesIds}
-            onDislike={removeMovie}
-          />
-          <ProtectedRoute
-            path='/profile'
-            component={Profile}
-            loggedIn={loggedIn}
-            handleEditProfile={handleEditProfile}
-            editError={editError}
-            editSuccess={editSuccess}
-            onExit={handleSignOut}
-          />
-          <Route path='/signup'>
-            {!loggedIn
-              ? <Register
-                  handleRegister={handleRegister}
-                  regError={regError}
+        {tokenChecked
+        &&  <Switch>  
+              <Route exact path='/'>
+                <Header
+                  loggedIn={loggedIn}
+                  location={location}
                 />
-              : <Redirect to='/movies' />
-            }
-          </Route>
-          <Route path='/signin'>
-            {!loggedIn
-              ? <Login
-                  handleLogin={handleLogin}
-                  authError={authError}
-                />
-              : <Redirect to='/movies' />
-            }
-          </Route>
-          <Route path='*'>
-            <NotFound />
-          </Route>
-        </Switch>
+                <Main />
+                <Footer />
+              </Route>
+              <ProtectedRoute
+                path='/movies'
+                component={Movies}
+                loggedIn={loggedIn}
+                location={location}
+                isLoading={isLoading}
+                handleSearch={handleSearch}
+                movies={foundMovies}
+                savedMoviesIds={savedMoviesIds}
+                onLike={saveMovie}
+                onDislike={removeMovie}
+                isFetched={isFetched}
+              />
+              <ProtectedRoute
+                path='/saved-movies'
+                component={SavedMovies}
+                loggedIn={loggedIn}
+                location={location}
+                handleSearch={handleSavedMoviesSearch}
+                movies={foundSavedMovies}
+                savedMoviesIds={savedMoviesIds}
+                onDislike={removeMovie}
+              />
+              <ProtectedRoute
+                path='/profile'
+                component={Profile}
+                loggedIn={loggedIn}
+                handleEditProfile={handleEditProfile}
+                editError={editError}
+                editSuccess={editSuccess}
+                onExit={handleSignOut}
+              />
+              <Route path='/signup'>
+                {!loggedIn
+                  ? <Register
+                      handleRegister={handleRegister}
+                      regError={regError}
+                    />
+                  : <Redirect to='/movies' />
+                }
+              </Route>
+              <Route path='/signin'>
+                {!loggedIn
+                  ? <Login
+                      handleLogin={handleLogin}
+                      authError={authError}
+                    />
+                  : <Redirect to='/movies' />
+                }
+              </Route>
+              <Route path='*'>
+                <NotFound />
+              </Route>
+            </Switch>
+        }
       </main>
     </CurrentUserContext.Provider>
   );

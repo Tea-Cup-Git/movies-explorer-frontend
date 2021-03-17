@@ -19,6 +19,7 @@ function SearchForm({ handleSearch }) {
     evt.preventDefault();
     if (value !== '') {
       handleSearch(value, checked.current.checked);
+      setValue('');
     }
   }
 

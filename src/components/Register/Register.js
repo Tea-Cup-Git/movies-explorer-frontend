@@ -46,7 +46,7 @@ function Register({ handleRegister, regError }) {
             buttonTitle='Зарегистрироваться'
             text='Уже зарегистрированы?'
             linkTitle='Войти'
-            formError={regError ? 'Что-то пошло не так.. Возможно пользователь с такой почтой уже существует' : ''}
+            onError={regError ? 'Что-то пошло не так.. Возможно пользователь с такой почтой уже существует' : ''}
             isValid={isValid}
             onSubmit={handleSubmit}
             dirty={dirty}

@@ -37,7 +37,7 @@ function Login({ handleLogin, authError }) {
             buttonTitle='Войти'
             text='Ещё не зарегистрированы?'
             linkTitle='Регистрация'
-            formError={authError ? 'Неверный логин или пароль' : ''}
+            onError={authError ? 'Неверный логин или пароль' : ''}
             isValid={isValid}
             onSubmit={handleSubmit}
             dirty={dirty}
